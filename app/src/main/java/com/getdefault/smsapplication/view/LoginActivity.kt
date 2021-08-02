@@ -1,11 +1,14 @@
 package com.getdefault.smsapplication.view
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -32,6 +35,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     //    Facebook log-in
     private lateinit var callbackManager: CallbackManager
     private val FB_SIGN_IN: Int = 64206
+    val SMS_REQUEST_CODE = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +43,23 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun init() {
+
+//        if (!Utils.isAllPermissionsGranted(this, arrayOf("Manifest.permission.RECEIVE_SMS"))) {
+//        Utils.requestPermissions(this,arrayOf("Manifest.permission.RECEIVE_SMS"), SMS_REQUEST_CODE)
+//        }
+
+        if (checkSelfPermission(Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.RECEIVE_SMS), SMS_REQUEST_CODE
+            )
+        }
+
         fbLoginInitialization()
         googleLoginInitialization()
 
         setUI()
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -136,6 +153,25 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         startActivity(intent)
 
         finish()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == SMS_REQUEST_CODE) {
+            if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                    this, arrayOf(Manifest.permission.RECEIVE_SMS), SMS_REQUEST_CODE
+                )
+            }
+//            else {
+//                val intent = Intent(this, MainActivity::class.java)
+//                startActivity(intent)
+//            }
+        }
     }
 
 }

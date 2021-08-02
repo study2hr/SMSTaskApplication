@@ -11,13 +11,24 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SMSTaskApplication">
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".view.SplashActivity"
+            android:exported="true"
+            android:theme="@style/AppThemeNoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <receiver
             android:name=".receiver.SMSReceiver"
             android:enabled="true"
             android:exported="true">
-            <intent-filter  android:priority="500">
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
+            <intent-filter android:priority="500">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
 
@@ -41,16 +52,14 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.LoginActivity" android:exported="true">
-
-
+        <activity
+            android:name=".view.LoginActivity"
+            android:exported="true"
+            android:theme="@style/AppThemeNoActionBar">
         </activity>
-        <activity android:name=".view.MainActivity" android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity
+            android:name=".view.MainActivity"
+            android:exported="true">
         </activity>
     </application>
 

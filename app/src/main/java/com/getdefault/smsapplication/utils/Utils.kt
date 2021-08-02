@@ -1,8 +1,10 @@
 package com.getdefault.smsapplication.utils
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
-import java.lang.Exception
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -33,5 +35,29 @@ object Utils {
         } catch (e: Exception) {
         }
         return ""
+    }
+
+    fun isAllPermissionsGranted(
+        activity: Activity,
+        listOfPermissions: Array<String>
+    ): Boolean {
+        for (permission in listOfPermissions) {
+            if (activity.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                return false
+            }
+        }
+        return true
+    }
+
+    fun requestPermissions(
+        activity: Activity,
+        listOfPermissions: Array<String>,
+        permissionRequestCode: Int
+    ) {
+        ActivityCompat.requestPermissions(
+            activity,
+            listOfPermissions,
+            permissionRequestCode
+        )
     }
 }
